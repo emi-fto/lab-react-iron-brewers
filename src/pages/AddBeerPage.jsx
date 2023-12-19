@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function AddBeerPage() {
   // State variables to store the values of the form inputs. You can leave these as they are.
@@ -21,7 +22,7 @@ function AddBeerPage() {
   const handleAttenuationLevel = (e) => setAttenuationLevel(e.target.value);
   const handleContributedBy = (e) => setContributedBy(e.target.value);
 
-
+  const navigate = useNavigate()
 
   // TASK:
   // 1. Create a function to handle the form submission and send the form data to the Beers API to create a new beer.
@@ -29,15 +30,16 @@ function AddBeerPage() {
   // 3. Once the beer is created, navigate the user to the page showing the list of all beers.
   const handleSubmit = async event => {
     event.preventDefault();
+    
     const addBeer = {name,
       tagline,
       description,
-      imageUrl,
-      firstBrewed,
-      brewersTips,
-      attenuationLevel,
-      contributedBy}
-      
+      image_url : imageUrl,
+      first_brewed : firstBrewed,
+      brewers_tips : brewersTips,
+      attenuation_level : attenuationLevel ,
+      contributed_by : contributedBy}
+
       try{
         const response = await fetch(`https://ih-beers-api2.herokuapp.com/beers/new` , {
           method: "POST",
@@ -48,15 +50,6 @@ function AddBeerPage() {
         })
         if (response.status === 200) {
           const newBeer = await response.json()
-          setName(newBeer.name)
-          setTagline(newBeer.tagline)
-          setDescription(newBeer.description)
-          setImageUrl(newBeer.image_url)
-          setFirstBrewed(newBeer.first_brewed)
-          setBrewersTips(newBeer.brewers_tips)
-          setAttenuationLevel(Number(newBeer.attenuation_level))
-          setContributedBy(newBeer.contributed_by)
-
           navigate(`/beers`)
         }
       }
